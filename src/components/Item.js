@@ -20,6 +20,18 @@ function Item(props) {
 		props.history.push(`/update-form/${item.id}`);
 	};
 
+	const handleDelete = e => {
+		e.preventDefault();
+		axios
+			.delete(`http://localhost:3333/items/${item.id}`)
+			.then(res => {
+				// console.log(res.data);
+				props.setItems(res.data);
+				props.history.push("/item-list");
+			})
+			.catch(err => console.log(err));
+	};
+
 	return (
 		<div className="item-wrapper">
 			<div className="item-header">
@@ -49,7 +61,9 @@ function Item(props) {
 			<button className="md-button" onClick={handleUpdate}>
 				Edit
 			</button>
-			<button className="md-button">Delete</button>
+			<button className="md-button" onClick={handleDelete}>
+				Delete
+			</button>
 		</div>
 	);
 }

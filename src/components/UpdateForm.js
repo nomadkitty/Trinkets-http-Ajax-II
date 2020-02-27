@@ -12,14 +12,16 @@ const initialItem = {
 
 const UpdateForm = props => {
 	const [item, setItem] = useState(initialItem);
-
+	// console.log(item);
 	const { id } = useParams();
 
 	// find the form
 	useEffect(() => {
-		console.log(props.items);
+		// console.log("item", props.items);
 		const itemToUpdate = props.items.find(item => item.id === Number(id));
-		setItem(itemToUpdate);
+		if (itemToUpdate) {
+			setItem(itemToUpdate);
+		}
 	}, [props.items, id]);
 
 	const changeHandler = ev => {
@@ -39,8 +41,11 @@ const UpdateForm = props => {
 		e.preventDefault();
 		// make a PUT request to edit the item
 		axios
-			.post(`http://localhost:3333/items/${id}`)
-			.then(res => console.log(res.data))
+			.put(`http://localhost:3333/items/${id}`, item)
+			.then(res => {
+				props.setItems(res.data);
+				props.history.push(`/item-list/${id}`);
+			})
 			.catch(err => console.log(err));
 	};
 
